@@ -1,0 +1,38 @@
+project_name: jooq-sandbox
+
+containers:
+  sandbox-service:
+    build_directory: ./.batect/sandbox-service
+    ports:
+      - local: 8080
+        container: 8080
+    health_check:
+      command: "curl --fail --silent http://localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+tasks:
+  build:
+    description: Build the application
+    group: Build tasks
+    run:
+      container: java-build-env
+      environment:
+        USERNAME: $USERNAME
+        TOKEN: $TOKEN
+      command: ./gradlew build --exclude-task test
+
+  run:
+    description: Start the application
+    group: Run tasks
+    prerequisites:
+      - build
+    run:
+      container: sandbox-service
+
+include:
+  - type: git
+    repo: https://github.com/batect/java-bundle.git
+    ref: 0.7.0

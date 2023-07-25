@@ -13,4 +13,6 @@ generated
 .classpath
 .gradle
 hs_err_pid*
-.batect
+
+.batect/caches/
+.batect/sandbox-service/*.jar

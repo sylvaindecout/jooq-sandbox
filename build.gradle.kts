@@ -47,6 +47,9 @@ tasks {
   withType<Test>().configureEach {
     useJUnitPlatform()
   }
+  bootJar {
+    destinationDirectory.set(file(".batect/sandbox-service/"))
+  }
 }
 
 springBoot {
