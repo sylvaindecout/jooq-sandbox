@@ -1,8 +1,22 @@
 project_name: jooq-sandbox
 
 containers:
+  database:
+    build_directory: ./.batect/database
+    environment:
+      POSTGRES_DB: sandbox
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user123
+    ports:
+      - local: 5432
+        container: 5432
+
   sandbox-service:
     build_directory: ./.batect/sandbox-service
+    dependencies:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/sandbox?schema=sandbox
     ports:
       - local: 8080
         container: 8080

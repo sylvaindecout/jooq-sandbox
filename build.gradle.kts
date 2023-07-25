@@ -1,8 +1,10 @@
 val jvmVersion = "17"
 
+val liquibaseVersion = "4.23.0"
 val kotestVersion = "5.6.2"
 val kotestSpringExtensionVersion = "1.1.3"
 val kotlinLoggingVersion = "3.0.5"
+val testcontainersVersion = "1.18.3"
 
 plugins {
   kotlin("jvm") version "1.9.0"
@@ -25,6 +27,10 @@ dependencies {
   implementation("org.springframework.boot", "spring-boot-starter-web")
   implementation("org.springframework.boot", "spring-boot-starter-validation")
   implementation("org.springframework.boot", "spring-boot-starter-actuator")
+
+  implementation("org.liquibase", "liquibase-core", liquibaseVersion)
+  runtimeOnly("org.postgresql", "postgresql")
+  testRuntimeOnly("com.h2database", "h2")
 
   testImplementation("io.kotest", "kotest-runner-junit5", kotestVersion)
   testImplementation("io.kotest", "kotest-property", kotestVersion)
