@@ -48,3 +48,7 @@ tasks {
     useJUnitPlatform()
   }
 }
+
+springBoot {
+  mainClass.set("fr.sdecout.sandbox.AppKt")
+}
