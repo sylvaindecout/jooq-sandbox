@@ -48,6 +48,16 @@ tasks:
       environment:
         SPRING_PROFILES_ACTIVE: jpa
 
+  run-jooq:
+    description: Start the application with jOOQ
+    group: Run tasks
+    prerequisites:
+      - build
+    run:
+      container: sandbox-service
+      environment:
+        SPRING_PROFILES_ACTIVE: jooq
+
 include:
   - type: git
     repo: https://github.com/batect/java-bundle.git
