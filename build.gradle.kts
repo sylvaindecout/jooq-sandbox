@@ -3,6 +3,7 @@ val jvmVersion = "17"
 val liquibaseVersion = "4.23.0"
 val kotestVersion = "5.6.2"
 val kotestSpringExtensionVersion = "1.1.3"
+val kotestTestcontainersExtensionVersion = "2.0.2"
 val kotlinLoggingVersion = "3.0.5"
 val testcontainersVersion = "1.18.3"
 
@@ -27,6 +28,7 @@ dependencies {
   implementation("org.springframework.boot", "spring-boot-starter-web")
   implementation("org.springframework.boot", "spring-boot-starter-validation")
   implementation("org.springframework.boot", "spring-boot-starter-actuator")
+  implementation("org.springframework.boot", "spring-boot-starter-data-jpa")
 
   implementation("org.liquibase", "liquibase-core", liquibaseVersion)
   runtimeOnly("org.postgresql", "postgresql")
@@ -35,6 +37,11 @@ dependencies {
   testImplementation("io.kotest", "kotest-runner-junit5", kotestVersion)
   testImplementation("io.kotest", "kotest-property", kotestVersion)
   testImplementation("io.kotest", "kotest-assertions-core", kotestVersion)
+
+  testImplementation(platform("org.testcontainers:testcontainers-bom:$testcontainersVersion"))
+  testImplementation("org.testcontainers", "junit-jupiter")
+  testImplementation("org.testcontainers", "postgresql")
+  testImplementation("io.kotest.extensions", "kotest-extensions-testcontainers", kotestTestcontainersExtensionVersion)
 
   testImplementation("org.springframework.boot", "spring-boot-starter-test") {
     exclude("org.junit.vintage", "junit-vintage-engine")

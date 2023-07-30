@@ -13,7 +13,9 @@ import fr.sdecout.sandbox.rest.library.LibraryId
 import fr.sdecout.sandbox.rest.library.LibrarySearch
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
+@Profile("!jpa")
 @Configuration
 class StubConfig {
 

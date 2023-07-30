@@ -38,13 +38,15 @@ tasks:
         TOKEN: $TOKEN
       command: ./gradlew build --exclude-task test
 
-  run:
-    description: Start the application
+  run-jpa:
+    description: Start the application with JPA
     group: Run tasks
     prerequisites:
       - build
     run:
       container: sandbox-service
+      environment:
+        SPRING_PROFILES_ACTIVE: jpa
 
 include:
   - type: git
