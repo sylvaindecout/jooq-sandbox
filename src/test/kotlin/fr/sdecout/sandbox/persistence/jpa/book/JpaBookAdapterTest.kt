@@ -8,6 +8,7 @@ import io.kotest.core.NamedTag
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
+import io.kotest.property.checkAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -16,6 +17,7 @@ import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD
+import org.springframework.test.util.ReflectionTestUtils.setField
 import org.testcontainers.containers.PostgreSQLContainer
 
 @ActiveProfiles("jpa")
@@ -52,24 +54,30 @@ class JpaBookAdapterTest : ShouldSpec() {
         extension(SpringExtension)
 
         should("fail to find unknown book") {
-            val isbn = Isbn("0000000000000")
+            checkAll<JpaBookAdapter.Mode> { mode ->
+                setField(bookAdapter,"mode", mode)
+                val isbn = Isbn("0000000000000")
 
-            val author = bookAdapter.findBook(isbn)
+                val author = bookAdapter.findBook(isbn)
 
-            author shouldBe null
+                author shouldBe null
+            }
         }
 
         should("find book") {
-            val isbn = Isbn(CRIME_AND_PUNISHMENT.isbn!!)
+            checkAll<JpaBookAdapter.Mode> { mode ->
+                setField(bookAdapter, "mode", mode)
+                val isbn = Isbn(CRIME_AND_PUNISHMENT.isbn!!)
 
-            val author = bookAdapter.findBook(isbn)
+                val author = bookAdapter.findBook(isbn)
 
-            author shouldBe BookResponse(
-                isbn = CRIME_AND_PUNISHMENT.isbn,
-                title = CRIME_AND_PUNISHMENT.title,
-                authors = CRIME_AND_PUNISHMENT.authors,
-                availability = mutableListOf(BNF),
-            )
+                author shouldBe BookResponse(
+                    isbn = CRIME_AND_PUNISHMENT.isbn,
+                    title = CRIME_AND_PUNISHMENT.title,
+                    authors = CRIME_AND_PUNISHMENT.authors,
+                    availability = mutableListOf(BNF),
+                )
+            }
         }
 
         should("search books matching hint") {
